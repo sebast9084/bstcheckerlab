@@ -4,6 +4,7 @@
 #include "BSTNode.h"
 #include <queue>
 #include <unordered_set>
+#include <climits>
 using namespace std;
 class BSTChecker {
 public:
@@ -24,20 +25,22 @@ public:
 	queue<int> maxQueue;
 	unordered_set<BSTNode*> encountered;
 	nodeQueue.push(rootNode);
-	maxQueue.push(0);
-	minQueue.push(0);
+	//Set default bounds
+	maxQueue.push(INT_MAX);
+	minQueue.push(INT_MIN);
 	while(!nodeQueue.empty()){
+		//Change bounds and nodes
 		BSTNode* node = nodeQueue.front();
 		nodeQueue.pop();
 		int smallerKey = minQueue.front();
-		nodeQueue.pop();
+		minQueue.pop();
 		int largerKey = maxQueue.front();
-		nodeQueue.pop();
+		maxQueue.pop();
 		if (encountered.count(node)){ //Checks for duplicates
 			return node;
 		}
 		encountered.insert(node);
-		if (node->key <= smallerKey || node->key >= largerKey) { //Checks if keys are within range
+		if (node->key <= smallerKey || node->key >= largerKey) { //Checks if values are within range
             		return node;  
         	}
  		if (node->left != nullptr) {
@@ -51,8 +54,10 @@ public:
 		    maxQueue.push(largerKey); //Makes sure maximum limit is same
         	}
 	}
-       	return rootNode;
+       	return nullptr;
     }
 };
 #endif
+
+
 
